@@ -144,6 +144,8 @@ cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 rare.db
+rare.sql
 Pipfile*
 .vscode
 rare.sql
+.session.sql
