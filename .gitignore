@@ -147,3 +147,4 @@ rare.db
 rare.sql
 Pipfile*
 .vscode
+*.session.sql
