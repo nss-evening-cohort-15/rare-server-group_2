@@ -88,7 +88,9 @@ INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
-INSERT INTO Users VALUES (null,'Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', NULL, NULL, NULL, NULL );
+INSERT INTO Users VALUES ('Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', NULL, NULL, NULL, NULL );
+
+INSERT INTO Users VALUES (NULL, 'Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', NULL, NULL, NULL, NULL );
 
 SELECT *
 FROM Users
