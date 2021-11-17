@@ -91,6 +91,19 @@ INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.c
 INSERT INTO Users VALUES ('Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', NULL, NULL, NULL, NULL );
 
 INSERT INTO Users VALUES (NULL, 'Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', NULL, NULL, NULL, NULL );
+INSERT INTO Users VALUES (
+  NULL, 
+  'Bob', 
+  'Bobberson', 
+  'bob@nss.com', 
+  'bob@nss.com',
+  'BobBobberson', 
+  'bob', 
+  'url', 
+  11-15-2021, 
+   1);
 
 SELECT *
 FROM Users
+
+
