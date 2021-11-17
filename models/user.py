@@ -8,7 +8,7 @@ class User():
     self.bio = bio
     self.username = email
     self.password = password
-    self.profile_image_url = profile_image_url,
+    self.profile_image_url = profile_image_url
     self.created_on = created_on or datetime.now()
     self.active = active
   
