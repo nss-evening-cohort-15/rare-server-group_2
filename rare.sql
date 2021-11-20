@@ -90,7 +90,9 @@ INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.c
 
 INSERT INTO Users VALUES (NULL, 'Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', 'password', NULL, NULL, NULL );
 
+INSERT INTO Posts VALUES (NULL, 13, NULL, 'Git into it!!!', NULL, NULL, 'how bout them cowboys', NULL)
+
 SELECT*
-FROM Users
+FROM Posts
 
 

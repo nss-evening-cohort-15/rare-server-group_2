@@ -18,11 +18,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept')
         self.end_headers()
 
-    # def do_GET(self):
-    #     print('***************')
-    #     self._set_headers(200)
-    #     self.wfile.write(json.dumps([]).encode())
-    
     def do_POST(self):
         content_len = int(self.headers.get('content-length', 0))
         raw_body = self.rfile.read(content_len)
@@ -58,11 +53,13 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         self.wfile.write(json.dumps(response).encode())
 
+
 def main():
     host = ''
     port = 8088
     print(f'listening on port {port}!')
     HTTPServer((host, port), RareRequestHandler).serve_forever()
+
 
 if __name__ == "__main__":
     main()
