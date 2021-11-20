@@ -1,65 +1,69 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-from users import (
-    get_all_users,
-    get_single_user,
-    create_user,
-    get_users_by_email
-)
+from users import create_user, login_user
 
+class RareRequestHandler(BaseHTTPRequestHandler):
 
-class HandleRequests(BaseHTTPRequestHandler):
-    # ⭕️ we are creating our own class HandleRequests based on the BaseHTTPRequestHandler we imported.
-
-    # Here's a class function
     def _set_headers(self, status):
         self.send_response(status)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
-
-    # Another method! This supports requests with the OPTIONS verb.
-    # ⭕️ letting the clients know what it supports as a server.
     def do_OPTIONS(self):
-        self.send_response(200) #Get
+        self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
         self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept')
         self.end_headers()
 
+    # def do_GET(self):
+    #     print('***************')
+    #     self._set_headers(200)
+    #     self.wfile.write(json.dumps([]).encode())
+    
+    def do_POST(self):
+        content_len = int(self.headers.get('content-length', 0))
+        raw_body = self.rfile.read(content_len)
+        post_body = json.loads(raw_body)
 
-   
-    def parse_url(self, path):
-        path_params = path.split("/")
-        resource = path_params[1]
+        response = None
+        
+        if self.path == '/login':
+            user = login_user(post_body)
+            if user:
+                response = {
+                    'valid': True,
+                    'token': user.id
+                }
+                self._set_headers(200)
+            else:
+                response = { 'valid': False }
+                self._set_headers(404)
 
-        # Check if there is a query string parameter
-        if "?" in resource:
-            # GIVEN: /customers?email=jenna@solis.com
-
-            param = resource.split("?")[1]  # email=jenna@solis.com
-            resource = resource.split("?")[0]  # 'customers'
-            pair = param.split("=")  # [ 'email', 'jenna@solis.com' ]
-            key = pair[0]  # 'email'
-            value = pair[1]  # 'jenna@solis.com'
-
-            return ( resource, key, value )
-
-        # No query string parameter
-        else:
-            id = None
-
+        if self.path == '/register':
             try:
-                id = int(path_params[2])
-            except IndexError:
-                pass  # No route parameter exists: /animals
-            except ValueError:
-                pass  # Request had trailing slash: /animals/
+                new_user = create_user(post_body)
+                response = {
+                    'valid': True,
+                    'token': new_user.id
+                }
+            except Exception as e:
+                response = {
+                    'valid': False,
+                    'error': str(e)
+                }
+            self._set_headers(201)
 
-            return (resource, id)
+        self.wfile.write(json.dumps(response).encode())
 
+
+def main():
+    host = ''
+    port = 8088
+    print(f'listening on port {port}!')
+    HTTPServer((host, port), RareRequestHandler).serve_forever()
 
 
     # Here's a method on the class that overrides the parent's method.

@@ -88,8 +88,8 @@ INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
-INSERT INTO Users VALUES ('Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', NULL, NULL, NULL, NULL );
 
+<<<<<<< HEAD
 INSERT INTO Users VALUES (NULL, 'Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', NULL, NULL, NULL, NULL );
 INSERT INTO Users VALUES (
   NULL, 
@@ -102,8 +102,17 @@ INSERT INTO Users VALUES (
   'url', 
   11-15-2021, 
    1);
+=======
+>>>>>>> 4a4cd2e97adc60bf478527ef6f0fb4e2bd255c1c
 
-SELECT *
+INSERT INTO Users VALUES (NULL, 'Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', 'password', NULL, NULL, NULL );
+
+SELECT*
 FROM Users
 
+<<<<<<< HEAD
 
+=======
+DELETE
+FROM Users
+>>>>>>> 4a4cd2e97adc60bf478527ef6f0fb4e2bd255c1c
