@@ -94,5 +94,3 @@ INSERT INTO Posts VALUES (NULL, 13, NULL, 'Git into it!!!', NULL, NULL, 'how bou
 
 SELECT*
 FROM Posts
-
-
