@@ -3,6 +3,8 @@ import json
 
 from users import create_user, login_user
 
+from categories import get_all_categories
+
 class RareRequestHandler(BaseHTTPRequestHandler):
 
     def _set_headers(self, status):
@@ -84,11 +86,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     response = f"{get_single_subscription(id)}"
                 else:
                     response = f"{get_all_subscriptions()}"
-            elif resource == "":
-                if id is not None:
-                    response = f"{get_single_post(id)}"
-                else:
-                    response = f"{get_all_posts()}"
             elif resource == "post_tags":
                 if id is not None:
                     response = f"{get_single_post_tag(id)}"
