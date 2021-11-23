@@ -3,6 +3,7 @@ import json
 
 from users import create_user, login_user
 
+from posts import get_all_posts
 class RareRequestHandler(BaseHTTPRequestHandler):
 
     def _set_headers(self, status):
