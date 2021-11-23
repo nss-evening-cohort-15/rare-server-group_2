@@ -7,6 +7,8 @@ from categories import (
     delete_category
 )
 
+from categories import get_all_categories
+
 class RareRequestHandler(BaseHTTPRequestHandler):
 
     def _set_headers(self, status):
