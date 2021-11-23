@@ -3,7 +3,10 @@ import json
 
 from users import create_user, login_user
 
+from posts import get_all_posts
+
 from categories import get_all_categories
+
 
 class RareRequestHandler(BaseHTTPRequestHandler):
 
