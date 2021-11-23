@@ -147,8 +147,27 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'error': str(e)
                 }
             self._set_headers(201)
+            
+        (resource, id) = self.parse_url(self.path)
+        
+        new_category = None
+        
+        if resource == "categories":
+            new_category = create_catergory(post_body)
 
-        self.wfile.write(json.dumps(response).encode())
+        self.wfile.write(f"{new_category}".encode())
+        
+        
+    def do_DELETE(self):
+        
+        self._set_headers(204)
+        
+        (resource, id) = self.parse_url(self.path)
+        
+        if resource == "categories":
+            delete_category(id)
+            
+        self.wfile.write("".encode())
 
 def main():
     host = ''
