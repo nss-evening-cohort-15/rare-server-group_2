@@ -3,6 +3,8 @@ import json
 
 from users import create_user, login_user
 
+from comments import get_single_comment, get_all_comments, create_comment
+
 class RareRequestHandler(BaseHTTPRequestHandler):
 
     def _set_headers(self, status):
@@ -84,11 +86,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     response = f"{get_single_subscription(id)}"
                 else:
                     response = f"{get_all_subscriptions()}"
-            elif resource == "":
-                if id is not None:
-                    response = f"{get_single_post(id)}"
-                else:
-                    response = f"{get_all_posts()}"
+           
             elif resource == "post_tags":
                 if id is not None:
                     response = f"{get_single_post_tag(id)}"
@@ -147,6 +145,15 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'valid': False,
                     'error': str(e)
                 }
+                
+        if self.path == '/comments':
+            new_comment = create_comment(post_body)
+            if new_comment:
+                response = {
+                    'valid': True,
+                    'token': new_comment.id
+                }
+            
             self._set_headers(201)
 
         self.wfile.write(json.dumps(response).encode())

@@ -89,6 +89,7 @@ INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
 INSERT INTO Users VALUES (NULL, 'Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', 'password', NULL, NULL, NULL );
+-- INSERT INTO Comments 
 
 SELECT*
 FROM Users
