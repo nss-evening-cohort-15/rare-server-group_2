@@ -20,7 +20,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept')
         self.end_headers()
 
-
     def parse_url(self, path):
         path_params = path.split("/")
         resource = path_params[1]
@@ -153,6 +152,7 @@ def main():
     port = 8088
     print(f'listening on port {port}!')
     HTTPServer((host, port), RareRequestHandler).serve_forever()
+
 
 if __name__ == "__main__":
     main()
