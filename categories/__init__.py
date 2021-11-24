@@ -4,4 +4,4 @@ from .request import (
     create_category,
     get_single_category,
     edit_category
-    )
+)
