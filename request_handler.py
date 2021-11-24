@@ -5,7 +5,7 @@ from users import create_user, login_user
 
 from posts import get_all_posts
 
-from categories import get_all_categories
+from categories import get_all_categories, get_single_category, edit_category
 
 
 class RareRequestHandler(BaseHTTPRequestHandler):
@@ -149,6 +149,30 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             self._set_headers(201)
 
         self.wfile.write(json.dumps(response).encode())
+        
+        
+    def do_PUT(self):
+        self._set_headers(204)
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
+
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
+
+        # Delete a single animal from the list
+        success = False
+
+        if resource == "categories":
+            success = edit_category(id, post_body)
+        
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+
+        # Encode the new animal and send in response
+        self.wfile.write("".encode())
 
 def main():
     host = ''
