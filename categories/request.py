@@ -1,6 +1,5 @@
 import sqlite3
 import json
-
 from models import Category
 
 def get_all_categories():
@@ -31,7 +30,32 @@ def get_all_categories():
     # Use `json` package to properly serialize list as JSON
     return json.dumps(categories)  #⭕️⭕️⭕️ convert Python data type to a string.
 
+def create_category(new_category):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        INSERT INTO Categories
+            ( label )
+        VALUES
+            ( ? );
+        """,( new_category['label'], ))
+        
+        id = db_cursor.lastrowid
+        
+        new_category['id'] = id
+        
+    return json.dumps(new_category)
 
+
+def delete_category(id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        DELETE FROM Categories
+        WHERE id = ?
+        """, (id, ))
 def get_single_category(id):
     with sqlite3.connect("./rare.db") as conn:
 
@@ -74,4 +98,3 @@ def edit_category(id, new_category):
     else:
         # ⭕️⭕️⭕️ Forces 204 response (No) by main module
         return True
-

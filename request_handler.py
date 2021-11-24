@@ -2,6 +2,10 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
 from users import create_user, login_user
+from categories import (
+    create_category,
+    delete_category
+)
 
 from posts import get_all_posts, edit_post, delete_post
 
@@ -116,6 +120,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
     
     
     def do_POST(self):
+        self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
         raw_body = self.rfile.read(content_len)
         post_body = json.loads(raw_body)
@@ -147,7 +152,27 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'error': str(e)
                 }
             self._set_headers(201)
+            
+        (resource, id) = self.parse_url(self.path)
+        
+        new_category = None
+        
+        if resource == "categories":
+            new_category = create_category(post_body)
 
+            self.wfile.write(f"{new_category}".encode())
+        
+        
+    def do_DELETE(self):
+        
+        self._set_headers(204)
+        
+        (resource, id) = self.parse_url(self.path)
+        
+        if resource == "categories":
+            delete_category(id)
+            
+        self.wfile.write("".encode())
         self.wfile.write(json.dumps(response).encode())
         
         
