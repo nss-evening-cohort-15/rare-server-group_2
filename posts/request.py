@@ -46,3 +46,31 @@ def get_all_posts():
             posts.append(post.__dict__)
             
     return json.dumps(posts)
+  
+def delete_post(id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        DELETE FROM Posts
+        WHERE id = ?
+        """,(id,))
+
+def edit_post(id, post):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        UPDATE Posts
+            SET
+                user_id =?,
+                category_id =?,
+                title =?,
+                publication_date = ?,
+                content = ?
+        WHERE id = ?
+        """, (post["user_id"], post["category_id"], post["title"], post["publication_date"], post["content"], id,))
+
+        rows_affected = db_cursor.rowcount
+        if rows_affected == 0:
+            return False
+        else:
+            return True
