@@ -3,7 +3,7 @@ import json
 
 from users import create_user, login_user
 
-from posts import get_all_posts
+from posts import get_all_posts, edit_post, delete_post
 
 from categories import get_all_categories
 
@@ -149,6 +149,36 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             self._set_headers(201)
 
         self.wfile.write(json.dumps(response).encode())
+
+    def do_PUT(self):
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
+
+        (resource, id) = self.parse_url(self.path)
+        success = False
+        if resource == "posts":
+            success = edit_post(id, post_body)
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+            
+        self.wfile.write("".encode())
+
+        
+    def do_DELETE(self):
+        # Set a 204 response code
+        self._set_headers(204)
+
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
+
+        if resource == "posts":
+            delete_post(id)
+
+        # Encode the new post and send in response
+        self.wfile.write("".encode())
 
 def main():
     host = ''
