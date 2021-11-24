@@ -95,7 +95,7 @@ def get_all_comments():
             comment.user['created_on'] = str(user.created_on)
 
     # Add the dictionary representation of the comment to the list
-        comments.append(comment.__dict__)
+            comments.append(comment.__dict__)
 
     # Use `json` package to properly serialize list as JSON
     return json.dumps(comments)
