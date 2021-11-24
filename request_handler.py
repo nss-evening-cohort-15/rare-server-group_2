@@ -3,7 +3,12 @@ import json
 
 from users import create_user, login_user
 
-from comments import get_single_comment, get_all_comments, create_comment
+from posts import get_all_posts, edit_post, delete_post
+
+from categories import get_all_categories
+
+from comments import get_all_comments, get_single_comment, create_comment
+
 
 class RareRequestHandler(BaseHTTPRequestHandler):
 
@@ -19,7 +24,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
         self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept')
         self.end_headers()
-
 
     def parse_url(self, path):
         path_params = path.split("/")
@@ -108,7 +112,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_reactions()}"
                     
-        elif len (parsed) == 3:
+            elif len (parsed) == 3:
             ( resource, key, value ) = parsed
             
         self.wfile.write(response.encode())
@@ -158,11 +162,42 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         self.wfile.write(json.dumps(response).encode())
 
+    def do_PUT(self):
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
+
+        (resource, id) = self.parse_url(self.path)
+        success = False
+        if resource == "posts":
+            success = edit_post(id, post_body)
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+            
+        self.wfile.write("".encode())
+
+        
+    def do_DELETE(self):
+        # Set a 204 response code
+        self._set_headers(204)
+
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
+
+        if resource == "posts":
+            delete_post(id)
+
+        # Encode the new post and send in response
+        self.wfile.write("".encode())
+
 def main():
     host = ''
     port = 8088
     print(f'listening on port {port}!')
     HTTPServer((host, port), RareRequestHandler).serve_forever()
+
 
 if __name__ == "__main__":
     main()
