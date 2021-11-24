@@ -31,12 +31,12 @@ def get_all_categories():
     return json.dumps(categories)  #⭕️⭕️⭕️ convert Python data type to a string.
 
 
-def create_catergory(new_category):
+def create_category(new_category):
     with sqlite3.connect("./rare.db") as conn:
         db_cursor = conn.cursor()
         
         db_cursor.execute("""
-        INSERT INTO Catergory
+        INSERT INTO Categories
             ( label )
         VALUES
             ( ? );
@@ -44,7 +44,7 @@ def create_catergory(new_category):
         
         id = db_cursor.lastrowid
         
-        new_animal['id'] = id
+        new_category['id'] = id
         
     return json.dumps(new_category)
 
@@ -54,6 +54,6 @@ def delete_category(id):
         db_cursor = conn.cursor()
         
         db_cursor.execute("""
-        DELETE FROM Category
+        DELETE FROM Categories
         WHERE id = ?
         """, (id, ))

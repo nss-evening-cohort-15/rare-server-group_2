@@ -3,7 +3,7 @@ import json
 
 from users import create_user, login_user
 from categories import (
-    create_catergory,
+    create_category,
     delete_category
 )
 
@@ -118,6 +118,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
     
     
     def do_POST(self):
+        self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
         raw_body = self.rfile.read(content_len)
         post_body = json.loads(raw_body)
@@ -155,9 +156,9 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         new_category = None
         
         if resource == "categories":
-            new_category = create_catergory(post_body)
+            new_category = create_category(post_body)
 
-        self.wfile.write(f"{new_category}".encode())
+            self.wfile.write(f"{new_category}".encode())
         
         
     def do_DELETE(self):
