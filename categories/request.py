@@ -56,6 +56,8 @@ def delete_category(id):
         DELETE FROM Categories
         WHERE id = ?
         """, (id, ))
+        
+        
 def get_single_category(id):
     with sqlite3.connect("./rare.db") as conn:
 

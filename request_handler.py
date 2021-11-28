@@ -1,15 +1,29 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-from users import create_user, login_user
+from users import (
+    create_user,
+    login_user
+    )
 from categories import (
+    get_all_categories,
+    get_single_category,
+    edit_category,
     create_category,
     delete_category
+    )
+from posts import (
+    get_all_posts,
+    edit_post,
+    delete_post
+    )
+from tags import (
+    get_all_tags,
+    get_single_tag,
+    create_tag,
+    delete_tag,
+    edit_tag
 )
-
-from posts import get_all_posts, edit_post, delete_post
-
-from categories import get_all_categories, get_single_category, edit_category
 
 
 class RareRequestHandler(BaseHTTPRequestHandler):
@@ -156,24 +170,28 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         (resource, id) = self.parse_url(self.path)
         
         new_category = None
+        new_tag = None
         
         if resource == "categories":
             new_category = create_category(post_body)
+        elif resource == "tags":
+            new_tag = create_tag(post_body)
 
-            self.wfile.write(f"{new_category}".encode())
+            self.wfile.write(f"{new_category, new_tag}".encode())
         
         
     def do_DELETE(self):
-        
         self._set_headers(204)
-        
         (resource, id) = self.parse_url(self.path)
         
         if resource == "categories":
             delete_category(id)
+        elif resource == "posts":
+            delete_post(id)
+        elif resource == "tags":
+            delete_tag(id)
             
         self.wfile.write("".encode())
-        self.wfile.write(json.dumps(response).encode())
         
         
     def do_PUT(self):
@@ -190,7 +208,11 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         if resource == "categories":
             success = edit_category(id, post_body)
-        
+        elif resource == "posts":
+            success = edit_post(id, post_body)
+        elif resource == "tags":
+            success = edit_tag(id, post_body)
+            
         if success:
             self._set_headers(204)
         else:
@@ -198,36 +220,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         # Encode the new animal and send in response
         self.wfile.write("".encode())
-
-    def do_PUT(self):
-        content_len = int(self.headers.get('content-length', 0))
-        post_body = self.rfile.read(content_len)
-        post_body = json.loads(post_body)
-
-        (resource, id) = self.parse_url(self.path)
-        success = False
-        if resource == "posts":
-            success = edit_post(id, post_body)
-        if success:
-            self._set_headers(204)
-        else:
-            self._set_headers(404)
-            
-        self.wfile.write("".encode())
-
         
-    def do_DELETE(self):
-        # Set a 204 response code
-        self._set_headers(204)
-
-        # Parse the URL
-        (resource, id) = self.parse_url(self.path)
-
-        if resource == "posts":
-            delete_post(id)
-
-        # Encode the new post and send in response
-        self.wfile.write("".encode())
 
 def main():
     host = ''
