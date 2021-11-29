@@ -56,6 +56,8 @@ def delete_category(id):
         DELETE FROM Categories
         WHERE id = ?
         """, (id, ))
+        
+        
 def get_single_category(id):
     with sqlite3.connect("./rare.db") as conn:
 
@@ -67,14 +69,14 @@ def get_single_category(id):
             c.id,
             c.label
         FROM categories c
-        where id = ?;
-        """)
+        where c.id = ?;
+        """, (id,))
 
         dataset = db_cursor.fetchone()
 
         category = Category(dataset['id'], dataset['label'])  
 
-    return json.dumps(category.__dict__)  #⭕️⭕️⭕️ convert Python data type to a string.
+    return json.dumps(category.__dict__) 
 
 
 def edit_category(id, new_category): 
