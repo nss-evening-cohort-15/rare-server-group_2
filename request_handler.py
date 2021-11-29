@@ -197,7 +197,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         # Parse the URL
         (resource, id) = self.parse_url(self.path)
-         success = False
+        success = False
 
         if self.path == "/categories":
             response = create_category(post_body)
