@@ -165,19 +165,14 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'valid': False,
                     'error': str(e)
                 }
-            self._set_headers(201)
-            
-        (resource, id) = self.parse_url(self.path)
+                self._set_headers(201)
         
-        new_category = None
-        new_tag = None
-        
-        if resource == "categories":
-            new_category = create_category(post_body)
-        elif resource == "tags":
-            new_tag = create_tag(post_body)
+        if self.path == '/categories':
+            response = create_category(post_body)
+        elif self.path == '/tags':
+            response = create_tag(post_body)
 
-            self.wfile.write(f"{new_category, new_tag}".encode())
+        self.wfile.write(json.dumps(response).encode())  
         
         
     def do_DELETE(self):
@@ -202,14 +197,17 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         # Parse the URL
         (resource, id) = self.parse_url(self.path)
+         success = False
 
-        # Delete a single animal from the list
-        success = False
+        if self.path == "/categories":
+            response = create_category(post_body)
 
         if resource == "categories":
             success = edit_category(id, post_body)
+            
         elif resource == "posts":
             success = edit_post(id, post_body)
+            
         elif resource == "tags":
             success = edit_tag(id, post_body)
             
@@ -218,7 +216,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         else:
             self._set_headers(404)
 
-        # Encode the new animal and send in response
         self.wfile.write("".encode())
         
 
