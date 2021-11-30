@@ -135,12 +135,12 @@ class RareRequestHandler(BaseHTTPRequestHandler):
     
     
     def do_POST(self):
-        self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
         raw_body = self.rfile.read(content_len)
         post_body = json.loads(raw_body)
 
         response = None
+        isLogingIn = None
         
         if self.path == '/login':
             user = login_user(post_body)
@@ -149,10 +149,10 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'valid': True,
                     'token': user.id
                 }
-                self._set_headers(200)
             else:
                 response = { 'valid': False }
-                self._set_headers(404)
+                
+            isLogingIn = True
 
         if self.path == '/register':
             try:
@@ -161,12 +161,16 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'valid': True,
                     'token': new_user.id
                 }
+                self._set_headers(201)
             except Exception as e:
                 response = {
                     'valid': False,
                     'error': str(e)
                 }
-                self._set_headers(201)
+                self._set_headers(400) 
+                #400: generic client-side error; 
+                #500: generic server-side error;
+                #300: redirecting actions;
         
         if self.path == '/categories':
             response = create_category(post_body)
@@ -174,6 +178,18 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             response = create_tag(post_body)
         elif self.path == '/posts':
             response = create_post(post_body)
+        
+        # safe way to set headers for all cases: (instead of setting it at the top)
+        if response:
+            if isLogingIn:
+                if response['valid']:
+                    self._set_headers(200)
+                else:
+                    self._set_headers(404)
+            else: 
+                self._set_headers(201)
+        else:
+            self._set_headers(400)
 
         self.wfile.write(json.dumps(response).encode())  
         
