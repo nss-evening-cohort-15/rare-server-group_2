@@ -15,7 +15,8 @@ from categories import (
 from posts import (
     get_all_posts,
     edit_post,
-    delete_post
+    delete_post,
+    create_post
     )
 from tags import (
     get_all_tags,
@@ -171,6 +172,8 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             response = create_category(post_body)
         elif self.path == '/tags':
             response = create_tag(post_body)
+        elif self.path == '/posts':
+            response = create_post(post_body)
 
         self.wfile.write(json.dumps(response).encode())  
         
