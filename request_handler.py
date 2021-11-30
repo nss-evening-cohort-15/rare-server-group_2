@@ -113,7 +113,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     response = f"{get_all_reactions()}"
                     
             elif len (parsed) == 3:
-            ( resource, key, value ) = parsed
+                ( resource, key, value ) = parsed
             
         self.wfile.write(response.encode())
     
