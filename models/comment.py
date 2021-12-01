@@ -8,3 +8,5 @@ class Comment():
         self.author_id = author_id
         self.content = content
         self.created_on = created_on or datetime.now()
+        self.post = None
+        self.author = None

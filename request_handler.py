@@ -1,11 +1,30 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-from users import create_user, login_user
-
-from posts import get_all_posts, edit_post, delete_post
-
-from categories import get_all_categories
+from users import (
+    create_user,
+    login_user
+    )
+from categories import (
+    get_all_categories,
+    get_single_category,
+    edit_category,
+    create_category,
+    delete_category
+    )
+from posts import (
+    get_all_posts,
+    edit_post,
+    delete_post,
+    create_post
+    )
+from tags import (
+    get_all_tags,
+    get_single_tag,
+    create_tag,
+    delete_tag,
+    edit_tag
+)
 
 from comments import get_all_comments, get_single_comment, create_comment
 
@@ -119,6 +138,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
     
     
     def do_POST(self):
+        self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
         raw_body = self.rfile.read(content_len)
         post_body = json.loads(raw_body)
@@ -149,48 +169,61 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'valid': False,
                     'error': str(e)
                 }
-                
-        if self.path == '/comments':
-            new_comment = create_comment(post_body)
-            if new_comment:
-                response = {
-                    'valid': True,
-                    'token': new_comment.id
-                }
+                self._set_headers(201)
+        
+        if self.path == '/categories':
+            response = create_category(post_body)
+        elif self.path == '/tags':
+            response = create_tag(post_body)
+        elif self.path == '/posts':
+            response = create_post(post_body)
+
+        self.wfile.write(json.dumps(response).encode())  
+        
+        
+    def do_DELETE(self):
+        self._set_headers(204)
+        (resource, id) = self.parse_url(self.path)
+        
+        if resource == "categories":
+            delete_category(id)
+        elif resource == "posts":
+            delete_post(id)
+        elif resource == "tags":
+            delete_tag(id)
             
-            self._set_headers(201)
-
-        self.wfile.write(json.dumps(response).encode())
-
+        self.wfile.write("".encode())
+        
+        
     def do_PUT(self):
+        self._set_headers(204)
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
         post_body = json.loads(post_body)
 
+        # Parse the URL
         (resource, id) = self.parse_url(self.path)
         success = False
-        if resource == "posts":
+
+        if self.path == "/categories":
+            response = create_category(post_body)
+
+        if resource == "categories":
+            success = edit_category(id, post_body)
+            
+        elif resource == "posts":
             success = edit_post(id, post_body)
+            
+        elif resource == "tags":
+            success = edit_tag(id, post_body)
+            
         if success:
             self._set_headers(204)
         else:
             self._set_headers(404)
-            
-        self.wfile.write("".encode())
 
+        self.wfile.write("".encode())
         
-    def do_DELETE(self):
-        # Set a 204 response code
-        self._set_headers(204)
-
-        # Parse the URL
-        (resource, id) = self.parse_url(self.path)
-
-        if resource == "posts":
-            delete_post(id)
-
-        # Encode the new post and send in response
-        self.wfile.write("".encode())
 
 def main():
     host = ''

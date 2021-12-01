@@ -88,11 +88,42 @@ CREATE TABLE "Categories" (
 INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
-
+INSERT INTO Posts ("id",
+  "user_id",
+  "category_id",
+  "title",
+  "publication_date",
+  "image_url",
+  "content",
+  "approved") VALUES (NULL, 1, 1, 'first post', '2021-12-01', '', 'some content', 1);
 INSERT INTO Users VALUES (NULL, 'Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', 'password', NULL, NULL, NULL );
-INSERT INTO Comments VALUES (4, 1, 3, 'Hey this is a test.', NULL);
+INSERT INTO Comments VALUES (NULL, 5, 3, 'Hey this is a test.', 2021-11-29);
 
 SELECT*
 FROM Comments
 
+SELECT *
+FROM Posts
 
+SELECT *
+FROM Users
+
+ALTER TABLE Comments
+ADD COLUMN created_on datetime
+
+  SELECT
+            c.id,
+            c.post_id,
+            c.author_id,
+            c.content,
+            c.created_on,
+            u.username,
+            p.title post_title
+        FROM Comments c
+        JOIN Users u
+            ON c.author_id = u.id
+        JOIN Posts p 
+            ON c.post_id = p.id
+
+UPDATE Comments
+SET author_id = 6
