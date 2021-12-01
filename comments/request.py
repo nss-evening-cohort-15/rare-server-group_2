@@ -69,7 +69,8 @@ def get_all_comments():
             u.email,
             u.first_name,
             u.last_name,
-            p.title post_title
+            p.title post_title,
+            p.publication_date
         FROM Comments c
         JOIN Users u
             ON u.id = c.author_id
@@ -95,19 +96,27 @@ def get_all_comments():
             user = User(id=row['id'], username=row['username'],
                         first_name=row['first_name'], 
                         last_name=row['last_name'], 
-                        email=row['email']),
-            post = Post(id=row['id'], title=row['post_title'], user_id=row['user_id']
+                        email=row['email'])
+            post = Post( title=row['post_title'],
+                        id='', 
+                        user_id='',
+                        category_id='',
+                        publication_date=row['publication_date'], 
+                        image_url='', 
+                        content='', 
+                        approved=True
                         )
 
     # Add the dictionary representation of the user to the comment
             comment.user = user.__dict__
             comment.post = post.__dict__
             comment.user['created_on'] = str(user.created_on)
+            comment.post['publication_date'] = str(post.publication_date)
+            comment.created_on = str(comment.created_on)
+
 
     # Add the dictionary representation of the comment to the list
             comments.append(comment.__dict__)
 
     # Use `json` package to properly serialize list as JSON
     return json.dumps(comments)
-
-

@@ -97,7 +97,8 @@ INSERT INTO Posts ("id",
   "content",
   "approved") VALUES (NULL, 1, 1, 'first post', '2021-12-01', '', 'some content', 1);
 INSERT INTO Users VALUES (NULL, 'Jon', 'Doe', 'jondoe@nss.com', NULL, 'jondoe', 'password', NULL, NULL, NULL );
-INSERT INTO Comments VALUES (NULL, 5, 3, 'Hey this is a test.', 2021-11-29);
+INSERT INTO Comments VALUES (NULL, 2, 5, 'Hey this is a test.', 2021-11-29);
+INSERT INTO Comments VALUES (NULL, 3, 5, 'comment content', 2021-11-30 );
 
 SELECT*
 FROM Comments
