@@ -26,6 +26,8 @@ from tags import (
     edit_tag
 )
 
+from comments import get_all_comments, get_single_comment, create_comment
+
 
 class RareRequestHandler(BaseHTTPRequestHandler):
 
@@ -107,6 +109,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     response = f"{get_single_subscription(id)}"
                 else:
                     response = f"{get_all_subscriptions()}"
+           
             elif resource == "post_tags":
                 if id is not None:
                     response = f"{get_single_post_tag(id)}"
@@ -128,8 +131,8 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_reactions()}"
                     
-        elif len (parsed) == 3:
-            ( resource, key, value ) = parsed
+            elif len (parsed) == 3:
+                ( resource, key, value ) = parsed
             
         self.wfile.write(response.encode())
     
