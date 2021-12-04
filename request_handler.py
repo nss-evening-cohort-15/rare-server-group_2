@@ -16,7 +16,8 @@ from posts import (
     get_all_posts,
     edit_post,
     delete_post,
-    create_post
+    create_post,
+    get_single_post
     )
 from tags import (
     get_all_tags,
