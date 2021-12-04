@@ -24,7 +24,8 @@ def get_single_post(id):
         WHERE p.id = ?;
             """, (id, ))
         dataset = db_cursor.fetchone()
-        post = Post(dataset["id"], dataset["user_id"], dataset["category_id"], dataset["title"], dataset["publication_date"], dataset["content"], dataset["approved"], id,)
+        post = Post(dataset["id"], dataset["user_id"], dataset["category_id"], dataset["title"], dataset["publication_date"], dataset["image_url"], dataset["content"], dataset["approved"])
+        
     return json.dumps(post.__dict__)
     
 def get_all_posts():
